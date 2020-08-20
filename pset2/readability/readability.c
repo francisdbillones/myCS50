@@ -2,10 +2,11 @@
 #include <cs50.h>
 #include <math.h>
 #include <string.h>
+#include <ctype.h>
 
 int main(void)
 {
-    int wordCount = 0;
+    int wordCount = 1;
     int letterCount = 0;
     int sentenceCount = 0;
     string userIn = get_string("Text: ");
@@ -13,18 +14,19 @@ int main(void)
 
     for (int i = 0; i < len; i++)
     {
-        if (userIn[i] == " ")
+        if (userIn[i] == ' ')
         {
             wordCount++;
         }
-        else if (userIn[i] == "!" || userIn[i] == "?" || userIn[i] == ".")
+        else if (userIn[i] == '!' || userIn[i] == '?' || userIn[i] == '.')
         {
             sentenceCount++;
         }
-        else
+        else if (isalpha(userIn[i]) != 0)
         {
             letterCount++;
         }
+        
 
     }
 
@@ -33,18 +35,22 @@ int main(void)
 
     int grade = round(0.0588 * letterAvg - 0.296 * sentenceAvg - 15.8);
 
+    printf("no. of words = %i\n", wordCount);
+    printf("no. of letters = %i\n", letterCount);
+    printf("no. of sentences = %i\n", sentenceCount);
+
     if (grade <= 1)
     {
-        printf("Before Grade 1");
+        printf("Before Grade 1\n");
     }
 
     else if (grade >= 16)
     {
-        printf("Grade 16+");
+        printf("Grade 16+\n");
     }
 
     else
     {
-        printf("Grade %i", grade);
+        printf("Grade %i\n", grade);
     }
 }
