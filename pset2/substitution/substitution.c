@@ -34,14 +34,14 @@ int main(int count, string key[])
     char alphabet[26] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
     for (int i = 0; i < length; i++)
     {
-        if (isalpha(key[0][i]) == 0)
+        if (isalpha(key[1][i]) == 0)
         {
-            printf("Your key includes a non-alphabetical character.\n");
+            printf("Your key includes a non-alphabetical character = %c.\n",  key[0][i]);
             return 1;
             break;
         }
     }
-    //completeness filter
+    //completeness and duplicate filter
     for (int y = 0; y < 26; y++)
     {
         if (scanArray(key[1], alphabet[y], length) == 0)
@@ -51,13 +51,16 @@ int main(int count, string key[])
             return 1;
             break;
         }
-        else if (scanArray(key[1], alphabet[y], length) > 1)
+        if (scanArray(key[1], alphabet[y], length) > 1)
         {
             printf("Your key has duplicate letters.\n");
             return 1;
             break;
         }
     }
+
+    //substitution algorithm
+    printf("your key is correct\n");
 }
 
 int scanArray(string text, char element, int length)
