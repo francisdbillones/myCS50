@@ -12,8 +12,7 @@ int main(void)
     }
     while (size < 1 || size > 8);
     
-    int sizeC = size;
-    draw(size,sizeC);
+    draw(size,size);
 }
 
 void draw(int height, int h)
