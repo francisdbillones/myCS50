@@ -3,7 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 
-int scanArray(string text, char element, int length);
+int scanText(string text, char element, int length);
+int searchArray(string array, char element, int length);
 
 int main(int count, string key[])
 {
@@ -44,14 +45,14 @@ int main(int count, string key[])
     //completeness and duplicate filter
     for (int y = 0; y < 26; y++)
     {
-        if (scanArray(key[1], alphabet[y], length) == 0)
+        if (scanText(key[1], alphabet[y], length) == 0)
         {
             printf("Your key does not include all letters of the alphabet.\n");
             printf("Missing: the letter %c\n", alphabet[y]);
             return 1;
             break;
         }
-        if (scanArray(key[1], alphabet[y], length) > 1)
+        if (scanText(key[1], alphabet[y], length) > 1)
         {
             printf("Your key has duplicate letters.\n");
             return 1;
@@ -60,10 +61,25 @@ int main(int count, string key[])
     }
 
     //substitution algorithm
-    printf("your key is correct\n");
+    string plaintext = get_string("Plaintext: ");
+    for (int z = 0; z < strlen(plaintext); z++)
+    {
+        if (isalpha(plaintext[z]) != 0)
+        {
+            if (isupper(plaintext[z]) != 0)
+            {
+                plaintext[z] = toupper(key[1][searchArray(alphabet, tolower(plaintext[z]), 26 )]);
+            }
+            else
+            {
+                plaintext[z] = tolower(key[1][searchArray(alphabet, tolower(plaintext[z]), 26 )]);
+            }
+        }
+    }
+    printf("Ciphertext = %s\n", plaintext);
 }
 
-int scanArray(string text, char element, int length)
+int scanText(string text, char element, int length)
 {
     int elemCount = 0;
     for (int x = 0; x < length; x++)
@@ -74,4 +90,19 @@ int scanArray(string text, char element, int length)
         }
     }
     return elemCount;
+}
+
+int searchArray(string array, char element, int length)
+{
+    int elemIndex = 0;
+    for (int q = 0; q < length; q++)
+    {
+        if (tolower(array[q]) == tolower(element))
+        {
+            elemIndex = q;
+            return elemIndex;
+            break;
+        }
+    }
+    return elemIndex;
 }
