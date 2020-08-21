@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <cs50.h>
 
-void draw(int height);
+void draw(int height, int h);
 
 int main(void)
 {
@@ -12,19 +12,31 @@ int main(void)
     }
     while (size < 1 || size > 8);
     
-    draw(size);
+    int sizeC = size;
+    draw(size,sizeC);
 }
 
-void draw(int height)
+void draw(int height, int h)
 {
-    if (height == 0)
+    if (h == 0)
     {
         return;
     }
+    
+    draw(height, h-1);
 
-    draw(height-1);
+    for (int n = h; n < height; n++)
+    {
+        printf(" ");
+    }
+    for (int m = (height - h); m < height; m++)
+    {
+        printf("#");
+    }
+    
+    printf("  ");
 
-    for (int i = 0; i < height; i++)
+    for (int i = 0; i < h; i++)
     {
         printf("#");
     }
