@@ -22,14 +22,7 @@ int main(int count, string key[])
     //length filter
     if (strlen(key[0]) != 26)
     {
-        if (strlen(key[0]) > 26)
-        {
-            printf("Your key has more than 26 characters. Please try again.\n");
-        }
-        else
-        {
-            printf("Your key has less than 26 characters. Please try again.\n");
-        }
+        printf("Your key has %zu characters. Only keys with 26 characters are accepted.\n", strlen(key[0]));
         return 1;
     }
     //alphabetical filter
