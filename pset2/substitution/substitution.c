@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
-int main(string key)
+int main(int length, string key[])
 {
     //length filter
     if (strlen(key) != 26)
