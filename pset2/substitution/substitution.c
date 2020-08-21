@@ -3,30 +3,43 @@
 #include <string.h>
 #include <ctype.h>
 
-int main(int length, string key[])
+int main(int count, string key[])
 {
-    //length filter
-    if (strlen(key) != 26)
+    //count filter
+    if (count != 1)
     {
-        if (strlen(key) > 26)
+        if (count == 0)
         {
-            printf("Your key has more than 26 characters. Please try again.")
-            return 1
+            printf("Please input a key.\n");
+        }
+        if (count > 1)
+        {
+            printf("You have entered %i arguments. Please input only one.\n", count);
+        }
+        printf("Usage: ./substitution KEY\n");
+        return 1;
+    }
+    //length filter
+    if (strlen(key[0]) != 26)
+    {
+        if (strlen(key[0]) > 26)
+        {
+            printf("Your key has more than 26 characters. Please try again.\n");
         }
         else
         {
-            printf("Your key has less than 26 characters. Please try again.");
-            return 1
+            printf("Your key has less than 26 characters. Please try again.\n");
         }
+        return 1;
     }
     //alphabetical filter
-    for (int i = 0; i < strlen(key); i++)
+    for (int i = 0; i < strlen(key[0]); i++)
     {
-        if (isalpha(key[i]) == 0)
+        if (isalpha(key[0][i]) == 0)
         {
-            printf("Your key includes a non-alphabetical character. Please try again.");
+            printf("Your key includes a non-alphabetical character. Please try again.\n");
             return 1;
         }
-        
+        if 
     }
 }
