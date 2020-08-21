@@ -61,7 +61,7 @@ int main(int count, string key[])
     }
 
     //substitution algorithm
-    string plaintext = get_string("Plaintext: ");
+    string plaintext = get_string("plaintext: ");
     for (int z = 0; z < strlen(plaintext); z++)
     {
         if (isalpha(plaintext[z]) != 0)
@@ -76,7 +76,9 @@ int main(int count, string key[])
             }
         }
     }
-    printf("Ciphertext = %s\n", plaintext);
+    printf("ciphertext: %s", plaintext);
+    printf("\n");
+    return 0;
 }
 
 int scanText(string text, char element, int length)
