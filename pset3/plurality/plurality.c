@@ -42,9 +42,36 @@ int main(int argc, string argv[])
         string name = get_string("Voter %i's vote:", n + 1);
         
         //checks for invalid usage
-        if (!vote(string))
+        if (!vote(name))
         {
             printf("Invalid vote.\n");
         }
+    }
+
+    printWinner();
+}
+
+bool vote(string name)
+{
+    for (int m = 0; m < argc - 1; m++)
+    {
+        if (strcmp(candidate[m].name, name) == 0)
+        {
+            candidate[m].votes += 1;
+            return true;
+        }
+    }
+    return false;
+}
+
+void printWinner(void)
+{
+    string smallest = candidate[0].votes;
+    for (int k = 0; k < argc - 1; k++)
+    {
+        if (candidate[k].votes < smallest)
+        [
+            smallest = candidate[k].votes
+        ]
     }
 }
