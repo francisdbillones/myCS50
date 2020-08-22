@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <cs50.h>
+#include <ctype.h>
 
 #define MAX 9
 
@@ -12,6 +13,11 @@ typedef struct
 candidate;
 
 candidate candidates[MAX];
+
+//function prototypes
+bool vote(string name, int candidateCount);
+void printWinner(int candidateCount);
+string makeLower(string inWord);
 
 int main(int argc, string argv[])
 {
@@ -35,43 +41,71 @@ int main(int argc, string argv[])
         candidates[i].votes = 0;
     }
 
-    int voterCount = get_int("Number of voters:");
+    int voterCount = get_int("Number of voters: ");
 
     for (int n = 0; n < voterCount; n++)
     {
-        string name = get_string("Voter %i's vote:", n + 1);
+        string name = get_string("Voter %i's vote: ", n + 1);
         
         //checks for invalid usage
-        if (!vote(name))
+        if (!vote(name, candidateCount))
         {
             printf("Invalid vote.\n");
         }
     }
 
-    printWinner();
+    printWinner(candidateCount);
+    for (int a = 0; a < candidateCount; a++)
+    {
+        printf("%s\n", candidates[a].name);
+    }
+    
 }
 
-bool vote(string name)
+bool vote(string name, int candidateCount)
 {
-    for (int m = 0; m < argc - 1; m++)
+    for (int m = 0; m < candidateCount; m++)
     {
-        if (strcmp(candidate[m].name, name) == 0)
+        if (strcmp(makeLower(candidates[m].name), makeLower(name)) == 0)
         {
-            candidate[m].votes += 1;
+            candidates[m].votes += 1;
             return true;
         }
     }
     return false;
 }
 
-void printWinner(void)
+void printWinner(int candidateCount)
 {
-    string smallest = candidate[0].votes;
-    for (int k = 0; k < argc - 1; k++)
+    int biggest = 0;
+    for (int k = 0; k < candidateCount; k++)
     {
-        if (candidate[k].votes < smallest)
-        [
-            smallest = candidate[k].votes
-        ]
+        if (candidates[k].votes > biggest)
+        {
+            biggest = candidates[k].votes;
+        }
     }
+
+    printf("Winner(s):\n");
+
+    for (int e = 0; e < candidateCount; e++)
+    {
+        if (candidates[e].votes == biggest)
+        {
+            printf("Candidate %s\n", candidates[e].name);
+        }
+    }
+}
+
+string makeLower(string inWord)
+{
+    string word = inWord;
+    for (int i = 0; i < strlen(word); i++)
+    {
+        if (islower(word[i]) == 0)
+        {
+            word[i] = tolower(word[i]);
+        }
+    }
+    return word;
 }
