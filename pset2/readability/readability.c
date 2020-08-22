@@ -6,12 +6,14 @@
 
 int main(void)
 {
+    //values
     int wordCount = 1;
     int letterCount = 0;
     int sentenceCount = 0;
     string userIn = get_string("Text: ");
     int len = strlen(userIn);
 
+    //analyze the text
     for (int i = 0; i < len; i++)
     {
         if (userIn[i] == ' ')
@@ -26,7 +28,7 @@ int main(void)
         {
             letterCount++;
         }
-        
+
 
     }
 
@@ -35,10 +37,7 @@ int main(void)
 
     int grade = round(0.0588 * letterAvg - 0.296 * sentenceAvg - 15.8);
 
-    printf("no. of words = %i\n", wordCount);
-    printf("no. of letters = %i\n", letterCount);
-    printf("no. of sentences = %i\n", sentenceCount);
-
+    //special formatting
     if (grade <= 1)
     {
         printf("Before Grade 1\n");
