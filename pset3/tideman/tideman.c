@@ -1,5 +1,6 @@
 #include <cs50.h>
 #include <stdio.h>
+#include <strings.h>
 
 // Max number of candidates
 #define MAX 9
@@ -99,42 +100,99 @@ int main(int argc, string argv[])
 // Update ranks given a new vote
 bool vote(int rank, string name, int ranks[])
 {
-    // TODO
+    for (int i = 0; i < candidate_count; i++)
+    {
+        if (strcasecmp(name, candidates[i]) == 0)
+        {
+            ranks[rank] = i;
+            return true;
+        }
+    }
     return false;
 }
 
 // Update preferences given one voter's ranks
 void record_preferences(int ranks[])
 {
-    // TODO
+    for (int i = 0; i < candidate_count; i++)
+    {
+        for (int j = i + 1; j < candidate_count; j++)
+        {
+            preferences[ranks[i]][ranks[j]]++;
+        }
+    }
     return;
 }
 
 // Record pairs of candidates where one is preferred over the other
 void add_pairs(void)
 {
-    // TODO
+    for (int i = 0; i < candidate_count; i++)
+    {
+        for (int j = 0; j < candidate_count; j++)
+        {
+            if (preferences[i][j] > preferences [j][i])
+            {
+                pair pair;
+                pair.winner = i;
+                pair.loser = j;
+                pairs[pair_count] = pair;
+                pair_count++;
+            }
+        }
+    }
     return;
 }
 
 // Sort pairs in decreasing order by strength of victory
 void sort_pairs(void)
 {
-    // TODO
+    sortedPairs[pair_count];
+    int biggest = 0;
+    for (int i = 0; i < candidate_count; i++)
+    {
+        for (int j = 0; j < candidate_count; j++)
+        {
+            if ((preferences[pairs[i].winner][pairs[i].loser] - preferences[pairs[i].loser][pairs[i].winner]) > biggest)
+            {
+                sortedPairs[i] = pairs[i];
+            }
+        }
+    }
     return;
 }
 
 // Lock pairs into the candidate graph in order, without creating cycles
 void lock_pairs(void)
 {
-    // TODO
+    int sourceCount = 0;
+    for (int i = 0; i < pair_count; i++)
+    {
+        locked[pairs[i].winner][pairs[i.loser]] = true;
+        if 
+    }
     return;
 }
+
+bool hasCycle()
 
 // Print the winner of the election
 void print_winner(void)
 {
-    // TODO
+    for (int i = 0; i < candidate; i++)
+    
     return;
+}
+
+int searchArray(int array[], int arrayLength, int element)
+{
+    for (int i = 0; i < arrayLength; i++)
+    {
+        if (array[i] == element)
+        {
+            return i;
+        }
+    }
+    return false;
 }
 
