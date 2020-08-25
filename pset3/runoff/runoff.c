@@ -1,6 +1,7 @@
 #include <cs50.h>
 #include <stdio.h>
 #include <strings.h>
+#include <math.h>
 
 // Max voters and candidates
 #define MAX_VOTERS 100
@@ -150,14 +151,11 @@ void tabulate(void)
         //iterates for preference of voter
         for (int j = 0; j < candidate_count; j++)
         {
-            //checks to see if candidate is eliminated
-            if (!candidate[preferences[i][j]].eliminated)
+            //tabulates if candidate is not eliminated
+            if (!candidates[preferences[i][j]].eliminated)
             {
-                candidate[preferences[i][j]].votes += 1;
-            }
-            else
-            {
-                continue;
+                candidates[preferences[i][j]].votes += 1;
+                break;
             }
         }
     }
@@ -168,7 +166,18 @@ void tabulate(void)
 // Print the winner of the election, if there is one
 bool print_winner(void)
 {
-    // TODO
+    int majority = round((voter_count) / 2);
+    
+    //goes through each candidate's vote count
+    for (int i = 0; i < candidate_count; i++)
+    {
+        //if the candidate's vote count is greater than or equal to majority, he/she is the winner
+        if (candidates[i].votes >= majority)
+        {
+            printf("%s\n", candidates[i].name);
+            return true;
+        }
+    }
     return false;
 }
 
