@@ -1,7 +1,6 @@
 #include <cs50.h>
 #include <stdio.h>
 #include <strings.h>
-#include <math.h>
 
 // Max voters and candidates
 #define MAX_VOTERS 100
@@ -154,7 +153,7 @@ void tabulate(void)
             //tabulates if candidate is not eliminated
             if (!candidates[preferences[i][j]].eliminated)
             {
-                candidates[preferences[i][j]].votes += 1;
+                candidates[preferences[i][j]].votes++;
                 break;
             }
         }
@@ -166,7 +165,7 @@ void tabulate(void)
 // Print the winner of the election, if there is one
 bool print_winner(void)
 {
-    int majority = round((voter_count) / 2);
+    int majority = (voter_count) / 2;
     
     //goes through each candidate's vote count
     for (int i = 0; i < candidate_count; i++)
@@ -184,15 +183,55 @@ bool print_winner(void)
 // Return the minimum number of votes any remaining candidate has
 int find_min(void)
 {
-    // TODO
-    return 0;
+    int smallest = candidates[0].votes;
+    for (int i = 0; i < candidate_count; i++)
+    {
+        if (candidates[i].votes < smallest)
+        {
+            smallest = candidates[i].votes;
+        }
+    }
+    return smallest;
 }
 
 // Return true if the election is tied between all candidates, false otherwise
 bool is_tie(int min)
 {
-    // TODO
-    return false;
+    int notEliminated[];
+    int eliminated = 0;
+    //adds candidates who aren't eliminated to notEliminated array
+    for (int i = 0; i < candidate_count; i++)
+    {
+        for (int j = 0; j < candidate_count; j++)
+        {
+            if (!candidates[j].eliminated)
+            {
+                notEliminated[i] = candidates[j].votes;
+                break;
+            }
+            eliminated++;
+        }
+    }
+
+    //checks if all elements in notEliminated array are tied
+    for (int i = 0; i < candidate_count - eliminated; i++)
+    {
+        //tied is initially false
+        bool tied = false;
+
+        //if there is tie in current iteration, tied is true
+        if (notEliminated[i].votes == notEliminated[i+1].votes)
+        {
+            tied = true;
+        }
+        
+        //current iteration has no tie, the whole array isn't tied
+        if (!tied)
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 // Eliminate the candidate (or candidates) in last place
@@ -201,3 +240,5 @@ void eliminate(int min)
     // TODO
     return;
 }
+
+
