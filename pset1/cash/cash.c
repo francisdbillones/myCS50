@@ -39,5 +39,5 @@ int main(void)
         pennies += 1;
     }
 
-    printf("Your change is %i quarters, %i dimes, %i nickels, %i pennies\n", quarters, dimes, nickels, pennies);
+    printf("Your change is %i quarters, %i dimes, %i nickels, and %i pennies\n", quarters, dimes, nickels, pennies);
 }
