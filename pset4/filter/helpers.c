@@ -25,7 +25,7 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 	{
 		for (int j = 0; j < width; j++)
 		{
-			tmp_image = image;
+			RGBTRIPLE tmp_image = image;
 			image[i][j] = tmp_image[i][width - j];
 		}
 	}
@@ -178,7 +178,49 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
 					}
 				}
 			}
-		}
+
+			int red_pixel_val = sqrt(((gx_red_sum)*(gx_red_sum)) + ((gy_red_sum)*(gy_red_sum)));
+			int blue_pixel_val = sqrt(((gx_blue_sum)*(gx_blue_sum)) + ((gy_blue_sum)*(gy_blue_sum)));
+			int green_pixel_val = sqrt(((gx_green_sum)*(gx_green_sum)) + ((gy_green_sum)*(gy_green_sum)));
+
+			//if pixel val is greater than 255, cap color value at 255
+			if (red_pixel_val > 255)
+			{
+				image[i][j].rgbtRed = 255;
+			}
+
+			//else pixel value is less than or equal to 255
+			else
+			{
+				image[i][j].rgbtRed = red_pixel_val;
+			}
+
+			//if pixel val is greater than 255, cap color value at 255
+			if (green_pixel_val > 255)
+			{
+				image[i][j].rgbtGreen = 255;
+			}
+
+			//else pixel value is less than or equal to 255
+			else
+			{
+				image[i][j].rgbtGreen = green_pixel_val;
+			}
+
+			//if pixel val is greater than 255, cap color value at 255
+			if (blue_pixel_val > 255)
+			{
+				image[i][j].rgbtBlue = 255;
+			}
+
+			//else pixel value is less than or equal to 255
+			else
+			{
+				image[i][j].rgbtBlue = blue_pixel_val;
+			}
+
+
+
 	}
     return;
 }
