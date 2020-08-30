@@ -50,7 +50,9 @@ int main(void)
             cardC /= 10;
         }
         int totalChecksum = checksum1 + checksum2;
-        
+
+        printf("checksum = %i\n", totalChecksum);
+
         //checking validity of checksum
         if ((totalChecksum % 10) == 0)
         {
