@@ -5,12 +5,12 @@ int main(void)
 {
     //gets card number from user
     long card;
-    //1st filter
+
     do
     {
         card = get_long("Enter your card number:");
     }
-    while (card < 0);
+    while (card < 0); //checks if card number is positive
 
     //gets exact length of card
     int digits = 0;
@@ -18,13 +18,12 @@ int main(void)
     {
         digits++;
     }
-    //second filter
-    if (digits == 13 || digits == 15 || digits == 16)
-    {
-    }
-    else
+
+    //checks if card digits match any digit standard
+    if (digits != 13 && digits != 15 && digits != 16)
     {
         printf("INVALID\n");
+        return false;
     }
 
     //checksum algorithm

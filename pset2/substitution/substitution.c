@@ -43,16 +43,16 @@ int main(int count, string key[])
         }
     }
     //completeness and duplicate filter
-    for (int y = 0; y < 26; y++)
+    for (int i = 0; i < 26; i++)
     {
-        if (scanText(key[1], alphabet[y], length) == 0)
+        if (scanText(key[1], alphabet[i], length) == 0)
         {
             printf("Your key does not include all letters of the alphabet.\n");
-            printf("Missing: the letter %c\n", alphabet[y]);
+            printf("Missing: the letter %c\n", alphabet[i]);
             return 1;
             break;
         }
-        if (scanText(key[1], alphabet[y], length) > 1)
+        if (scanText(key[1], alphabet[i], length) > 1)
         {
             printf("Your key has duplicate letters.\n");
             return 1;
