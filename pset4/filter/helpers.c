@@ -105,41 +105,76 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
 						continue;
 					}
 
-					//if pixel isn't in middle
-					if (l == j - 1 || l == j + 1)
+					//if pixel is on top or bottom row
+					if (k == i - 1 || k == i + 1)
 					{
-						//if pixel is on the left
-						if (l == j - 1)
+						//if pixel is on left or right side
+						if (l == j - 1 || l == j + 1)
 						{
-							//if pixel is in top or bottom row
-							if (k == i - 1 || k == i + 1)
-							//compute for gx accordingly
-							gx_red_sum += -1 * image[k][l].rgbtRed;
-							gx_blue_sum += -1 * image[k][l].rgbtBlue;
-							gx_green_sum += -1 * image[k][l].rgbtGreen;
-						}
+							//if pixel is on left
+							if (l == j - 1)
+							{
+								//compute for gx accordingly
+								gx_red_sum += -1 * image[k][l].rgbtRed;
+								gx_blue_sum += -1 * image[k][l].rgbtBlue;
+								gx_green_sum += -1 * image[k][l].rgbtGreen;
+							}
 
-						//else pixel is on the right
+							//else pixel is on right
+							else
+							{
+								//compute for gx accordingly
+								gx_red_sum += image[k][l].rgbtRed;
+								gx_blue_sum += image[k][l].rgbtBlue;
+								gx_green_sum += image[k][l].rgbtGreen;
+							}
+
+							//compute for gy accordingly
+							gy_red_sum += -1 * image[k][l].rgbtRed;
+							gy_green_sum += -1 * image[k][l].rgbtGreen;
+							gy_blue_sum += -1 * image[k][l].rgbtBlue;
+						}
+						
+						//else pixel is in middle column
 						else
 						{
-							//compute for gx accordingly
-							gx_red_sum += image[k][l].rgbtRed;
-							gx_blue_sum += image[k][l].rgbtBlue;
-							gx_green_sum += image[k][l].rgbtGreen;
+							//if pixel is on top row
+							if (k == i - 1)
+							{
+								//compute for gy accordingly
+								gy_red_sum += -2 * image[k][l].rgbtRed;
+								gy_green_sum += -2 * image[k][l].rgbtGreen;
+								gy_blue_sum += -2 * image[k][l].rgbtBlue;
+							}
+
+							//else pixel is in bottom row
+							else
+							{
+								gy_red_sum += 2 * image[k][l].rgbtRed;
+								gy_green_sum += 2 * image[k][l].rgbtGreen;
+								gy_blue_sum += 2 * image[k][l].rgbtBlue;
+							}
 						}
+					}
 
-						//compute for gy accordingly
-						gy_red_sum += -1 * image[k][l].rgbtRed;
-						gy_green_sum += -1 * image[k][l].rgbtGreen;
-						gy_blue_sum += -1 * image[k][l].rgbtBlue;
-
-					//else if pixel is in middle
+					//else pixel is in middle row
 					else
 					{
-						//compute for gy ONLY
-						gy_red_sum += -2 * image[k][l].rgbtRed;
-						gy_green_sum += -2 * image[k][l].rgbtGreen;
-						gy_blue_sum += -2 * image[k][l].rgbtBlue;
+						//if pixel is on left column
+						if (l == j - 1)
+						{
+							gx_red_sum += -2 * image[k][l].rgbtRed;
+							gx_green_sum += -2 * image[k][l].rgbtGreen;
+							gx_blue_sum += -2 * image[k][l].rgbtBlue;
+						}
+
+						//else if pixel is on right column
+						else if (l == j + 1)
+						{
+							gx_red_sum += 2 * image[k][l].rgbtRed;
+							gx_green_sum += 2 * image[k][l].rgbtGreen;
+							gx_blue_sum += 2 * image[k][l].rgbtBlue;
+						}
 					}
 				}
 			}
