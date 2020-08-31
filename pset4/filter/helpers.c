@@ -129,6 +129,11 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
 			int gx_green_sum = 0, gy_green_sum = 0;
 			int gx_blue_sum = 0, gy_blue_sum = 0;
 
+			if (i == 0 && j < 2)
+			{
+				printf("gx red before: %i\n", gx_red_sum);
+			}
+
 			//for each row in 3x3 grid
 			for (int a = -1; a <= 1; a++)
 			{
@@ -136,6 +141,11 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
 				if (i + a < 0 || i + a > height - 1)
 				{
 					continue;
+				}
+
+				if (i == 0 && j < 2)
+				{
+					printf("gx red during a(%i): %i\n", a + 1, gx_red_sum);
 				}
 
 				//for each column in 3x3 grid
@@ -147,10 +157,21 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
 						continue; 
 					}
 
+					if (i == 0 && j < 2)
+					{
+						printf("gx red during a(%i)b(%i), before gx computation: %i\n", a + 1, b + 1, gx_red_sum);
+						printf("b = %i\n", b);
+					}
+
 					//compute for gx
 					gx_red_sum += gx_weight[a + 1][b + 1] * tmp_image[i + a][j + b].rgbtRed;
 					gx_green_sum += gx_weight[a + 1][b + 1] * tmp_image[i + a][j + b].rgbtGreen;
 					gx_blue_sum += gx_weight[a + 1][b + 1] * tmp_image[i + a][j + b].rgbtBlue;
+
+					if (i == 0 && j < 2)
+					{
+						printf("gx red after a(%i)b(%i)	gx computation : %i\n", a + 1, b + 1, gx_red_sum);
+					}
 
 					//compute for gy
 					gy_red_sum += gy_weight[a + 1][b + 1] * tmp_image[i + a][j + b].rgbtRed;
