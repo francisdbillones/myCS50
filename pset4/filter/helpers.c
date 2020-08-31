@@ -13,7 +13,7 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
 		for (int j = 0; j < width; j++)
 		{
 			//gray value is average of all three color values
-			float gray_value_float = (image[i][j].rgbtBlue + image[i][j].rgbtGreen + image[i][j].rgbtRed) / 3;
+			float gray_value_float = (image[i][j].rgbtBlue + image[i][j].rgbtGreen + image[i][j].rgbtRed) / 3.0;
 			BYTE gray_value = round(gray_value_float);
 
 			image[i][j].rgbtBlue = gray_value;
@@ -27,18 +27,9 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
 // Reflect image horizontally
 void reflect(int height, int width, RGBTRIPLE image[height][width])
 {
+	//temp var
 	RGBTRIPLE tmp_image[height][width];
-	
-	//copy elements
-	for (int i = 0; i < height; i++)
-	{
-		for (int j = 0; j < width; j++)
-		{
-			tmp_image[i][j].rgbtRed = image[i][j].rgbtRed;
-			tmp_image[i][j].rgbtGreen = image[i][j].rgbtGreen;
-			tmp_image[i][j].rgbtBlue = image[i][j].rgbtBlue;
-		}
-	}
+	memcpy(tmp_image, *image, height*width*3);
 
 	//for each row in image
 	for (int i = 0; i < height; i++)
@@ -60,18 +51,9 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 void blur(int height, int width, RGBTRIPLE image[height][width])
 {
 
+	//temp var
 	RGBTRIPLE tmp_image[height][width];
-	
-	//copy elements
-	for (int i = 0; i < height; i++)
-	{
-		for (int j = 0; j < width; j++)
-		{
-			tmp_image[i][j].rgbtRed = image[i][j].rgbtRed;
-			tmp_image[i][j].rgbtGreen = image[i][j].rgbtGreen;
-			tmp_image[i][j].rgbtBlue = image[i][j].rgbtBlue;
-		}
-	}
+	memcpy(tmp_image, *image, height*width*3);
 
 	//for each row in image
 	for (int i = 0; i < height; i++)
@@ -79,10 +61,12 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
 		//for each column in image
 		for (int j = 0; j < width; j++)
 		{
+			//reset values for each pixel
 			int red_sum = 0;
 			int blue_sum = 0;
 			int green_sum = 0;
 			int grid_size = 0;
+
 			//for each row in 3x3 grid around [i][j]
 			for (int k = i - 1; k <= i + 1; k++)
 			{
@@ -125,20 +109,14 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
 // Detect edges
 void edges(int height, int width, RGBTRIPLE image[height][width])
 {
+	//sobel kernels
+	BYTE gx_weight[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {1, 0, 1}};
+	BYTE gy_weight[3][3] = {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}};
 
-	//temp var for image
+
+	//temp var
 	RGBTRIPLE tmp_image[height][width];
-
-	//copy elements
-	for (int i = 0; i < height; i++)
-	{
-		for (int j = 0; j < width; j++)
-		{
-			tmp_image[i][j].rgbtRed = image[i][j].rgbtRed;
-			tmp_image[i][j].rgbtGreen = image[i][j].rgbtGreen;
-			tmp_image[i][j].rgbtBlue = image[i][j].rgbtBlue;
-		}
-	}
+	memcpy(tmp_image, *image, height*width*3);
 
 	//loop for each pixel row in image
 	for (int i = 0; i < height; i++)
@@ -146,106 +124,44 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
 		//loop for each pixel column in image
 		for (int j = 0; j < width; j++)
 		{
-			//gx and gy values
+			//reset gx and gy values for each grid
 			int gx_red_sum = 0, gy_red_sum = 0;
 			int gx_green_sum = 0, gy_green_sum = 0;
 			int gx_blue_sum = 0, gy_blue_sum = 0;
 
-			//loop for each row in 3x3 grid
-			for (int k = i - 1; k <= i + 1; k++)
+			//for each row in 3x3 grid
+			for (int a = -1; a <= 1; a++)
 			{
-				//checks to see if pixel is beyond border
-				if (k < 0 || k > height - 1)
+				//if pixel is out of bounds
+				if (i + a < 0 || i + a > height - 1)
 				{
 					continue;
 				}
 
-				//loop for each column in 3x3 grid
-				for (int l = j - 1; l <= j + 1; l++)
+				//for each column in 3x3 grid
+				for (int b = -1; b <= 1; b++)
 				{
-					//checks to see if pixel is beyond border
-					if (l < 0 || l > width - 1)
+					//if pixel is out of bounds
+					if (j + b < 0 || j + b > width - 1)
 					{
-						continue;
+						continue; 
 					}
 
-					//if pixel is on top or bottom row
-					if (k == i - 1 || k == i + 1)
-					{
-						//if pixel is on left or right side
-						if (l == j - 1 || l == j + 1)
-						{
-							//if pixel is on left
-							if (l == j - 1)
-							{
-								//compute for gx accordingly
-								gx_red_sum += -1 * tmp_image[k][l].rgbtRed;
-								gx_blue_sum += -1 * tmp_image[k][l].rgbtBlue;
-								gx_green_sum += -1 * tmp_image[k][l].rgbtGreen;
-							}
+					//compute for gx
+					gx_red_sum += gx_weight[a + 1][b + 1] * tmp_image[i + a][j + b].rgbtRed;
+					gx_green_sum += gx_weight[a + 1][b + 1] * tmp_image[i + a][j + b].rgbtGreen;
+					gx_blue_sum += gx_weight[a + 1][b + 1] * tmp_image[i + a][j + b].rgbtBlue;
 
-							//else pixel is on right
-							else
-							{
-								//compute for gx accordingly
-								gx_red_sum += tmp_image[k][l].rgbtRed;
-								gx_blue_sum += tmp_image[k][l].rgbtBlue;
-								gx_green_sum += tmp_image[k][l].rgbtGreen;
-							}
-
-							//compute for gy accordingly
-							gy_red_sum += -1 * tmp_image[k][l].rgbtRed;
-							gy_green_sum += -1 * tmp_image[k][l].rgbtGreen;
-							gy_blue_sum += -1 * tmp_image[k][l].rgbtBlue;
-						}
-						
-						//else pixel is in middle column
-						else
-						{
-							//if pixel is on top row
-							if (k == i - 1)
-							{
-								//compute for gy accordingly
-								gy_red_sum += -2 * tmp_image[k][l].rgbtRed;
-								gy_green_sum += -2 * tmp_image[k][l].rgbtGreen;
-								gy_blue_sum += -2 * tmp_image[k][l].rgbtBlue;
-							}
-
-							//else pixel is in bottom row
-							else
-							{
-								gy_red_sum += 2 * tmp_image[k][l].rgbtRed;
-								gy_green_sum += 2 * tmp_image[k][l].rgbtGreen;
-								gy_blue_sum += 2 * tmp_image[k][l].rgbtBlue;
-							}
-						}
-					}
-
-					//else pixel is in middle row
-					else
-					{
-						//if pixel is on left column
-						if (l == j - 1)
-						{
-							gx_red_sum += -2 * tmp_image[k][l].rgbtRed;
-							gx_green_sum += -2 * tmp_image[k][l].rgbtGreen;
-							gx_blue_sum += -2 * tmp_image[k][l].rgbtBlue;
-						}
-
-						//else if pixel is on right column
-						else if (l == j + 1)
-						{
-							gx_red_sum += 2 * tmp_image[k][l].rgbtRed;
-							gx_green_sum += 2 * tmp_image[k][l].rgbtGreen;
-							gx_blue_sum += 2 * tmp_image[k][l].rgbtBlue;
-						}
-					}
+					//compute for gy
+					gy_red_sum += gy_weight[a + 1][b + 1] * tmp_image[i + a][j + b].rgbtRed;
+					gy_green_sum += gy_weight[a + 1][b + 1] * tmp_image[i + a][j + b].rgbtGreen;
+					gy_blue_sum += gy_weight[a + 1][b + 1] * tmp_image[i + a][j + b].rgbtBlue;
 				}
 			}
 
-			int red_pixel_val = sqrt(((gx_red_sum)*(gx_red_sum)) + ((gy_red_sum)*(gy_red_sum)));
-			int blue_pixel_val = sqrt(((gx_blue_sum)*(gx_blue_sum)) + ((gy_blue_sum)*(gy_blue_sum)));
-			int green_pixel_val = sqrt(((gx_green_sum)*(gx_green_sum)) + ((gy_green_sum)*(gy_green_sum)));
+			unsigned int red_pixel_val = round(sqrt(pow(gx_red_sum, 2) + pow(gy_red_sum, 2)));
+			unsigned int green_pixel_val = round(sqrt(pow(gx_green_sum, 2) + pow(gy_green_sum, 2)));
+			unsigned int blue_pixel_val = round(sqrt(pow(gx_blue_sum, 2) + pow(gy_blue_sum, 2)));
 
 			//if pixel val is greater than 255, cap color value at 255
 			if (red_pixel_val > 255)

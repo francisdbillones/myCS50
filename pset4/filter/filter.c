@@ -118,7 +118,6 @@ int main(int argc, char *argv[])
         // Reflect
         case 'r':
             reflect(height, width, image);
-            printf("size of image = %lu\n", sizeof(*image));
             break;
     }
 
