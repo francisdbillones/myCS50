@@ -106,11 +106,16 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
     return;
 }
 
+int limit(int value)
+{
+	return value < 255 ? value: 255;
+}
+
 // Detect edges
 void edges(int height, int width, RGBTRIPLE image[height][width])
 {
 	//sobel kernels
-	BYTE gx_weight[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {1, 0, 1}};
+	BYTE gx_weight[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
 	BYTE gy_weight[3][3] = {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}};
 
 
@@ -129,11 +134,6 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
 			int gx_green_sum = 0, gy_green_sum = 0;
 			int gx_blue_sum = 0, gy_blue_sum = 0;
 
-			if (i == 0 && j < 2)
-			{
-				printf("gx red before: %i\n", gx_red_sum);
-			}
-
 			//for each row in 3x3 grid
 			for (int a = -1; a <= 1; a++)
 			{
@@ -141,11 +141,6 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
 				if (i + a < 0 || i + a > height - 1)
 				{
 					continue;
-				}
-
-				if (i == 0 && j < 2)
-				{
-					printf("gx red during a(%i): %i\n", a + 1, gx_red_sum);
 				}
 
 				//for each column in 3x3 grid
@@ -157,12 +152,6 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
 						continue; 
 					}
 
-					if (i == 0 && j < 2)
-					{
-						printf("gx red during a(%i)b(%i), before gx computation: %i\n", a + 1, b + 1, gx_red_sum);
-						printf("b = %i\n", b);
-					}
-
 					//compute for gx
 					gx_red_sum += gx_weight[a + 1][b + 1] * tmp_image[i + a][j + b].rgbtRed;
 					gx_green_sum += gx_weight[a + 1][b + 1] * tmp_image[i + a][j + b].rgbtGreen;
@@ -170,7 +159,9 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
 
 					if (i == 0 && j < 2)
 					{
-						printf("gx red after a(%i)b(%i)	gx computation : %i\n", a + 1, b + 1, gx_red_sum);
+						printf("gx weight = %i\n", gx_weight[a + 1][b + 1]);
+						printf(" a + 1 = %i, b + 1 = %i\n", a + 1, b + 1);
+						printf("gx red sum = %i\n", gx_red_sum);
 					}
 
 					//compute for gy
@@ -180,47 +171,13 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
 				}
 			}
 
-			unsigned int red_pixel_val = round(sqrt(pow(gx_red_sum, 2) + pow(gy_red_sum, 2)));
-			unsigned int green_pixel_val = round(sqrt(pow(gx_green_sum, 2) + pow(gy_green_sum, 2)));
-			unsigned int blue_pixel_val = round(sqrt(pow(gx_blue_sum, 2) + pow(gy_blue_sum, 2)));
-
-			//if pixel val is greater than 255, cap color value at 255
-			if (red_pixel_val > 255)
-			{
-				image[i][j].rgbtRed = 255;
-			}
-
-			//else pixel value is less than or equal to 255
-			else
-			{
-				image[i][j].rgbtRed = red_pixel_val;
-			}
-
-			//if pixel val is greater than 255, cap color value at 255
-			if (green_pixel_val > 255)
-			{
-				image[i][j].rgbtGreen = 255;
-			}
-
-			//else pixel value is less than or equal to 255
-			else
-			{
-				image[i][j].rgbtGreen = green_pixel_val;
-			}
-
-			//if pixel val is greater than 255, cap color value at 255
-			if (blue_pixel_val > 255)
-			{
-				image[i][j].rgbtBlue = 255;
-			}
-
-			//else pixel value is less than or equal to 255
-			else
-			{
-				image[i][j].rgbtBlue = blue_pixel_val;
-			}
+			//assign new values of gx and gy based on pythagorean theorem and limit them to 255
+			image[i][j].rgbtRed = limit(round(sqrt(gx_red_sum*gx_red_sum + gy_red_sum*gy_red_sum)));
+			image[i][j].rgbtGreen = limit(round(sqrt(gx_green_sum*gx_green_sum + gy_green_sum*gy_green_sum)));
+			image[i][j].rgbtBlue = limit(round(sqrt(gx_blue_sum*gx_blue_sum + gy_blue_sum*gy_blue_sum)));
 		}
-
 	}
+
+	printf("gx_weight[1][0] = %i\n", gx_weight[1][0]);
     return;
 }
