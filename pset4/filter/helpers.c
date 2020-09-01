@@ -115,8 +115,8 @@ int limit(int value)
 void edges(int height, int width, RGBTRIPLE image[height][width])
 {
 	//sobel kernels
-	BYTE gx_weight[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
-	BYTE gy_weight[3][3] = {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}};
+	int gx_weight[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
+	int gy_weight[3][3] = {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}};
 
 
 	//temp var
