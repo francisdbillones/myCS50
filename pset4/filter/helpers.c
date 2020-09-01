@@ -24,6 +24,14 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
     return;
 }
 
+//swap elements
+void swap(RGBTRIPLE *pixel1, RGBTRIPLE *pixel2)
+{
+	RGBTRIPLE temp = *pixel1;
+	*pixel1 = *pixel2;
+	*pixel2 = temp;
+}
+
 // Reflect image horizontally
 void reflect(int height, int width, RGBTRIPLE image[height][width])
 {
@@ -35,13 +43,10 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 	for (int i = 0; i < height; i++)
 	{
 		//for each column in image
-		for (int j = 0; j < width; j++)
+		for (int j = 0; j < width / 2; j++)
 		{
-			//copy element at opposite end of array
-			image[i][j].rgbtRed = tmp_image[i][width - j - 1].rgbtRed;
-			image[i][j].rgbtGreen = tmp_image[i][width - j - 1].rgbtGreen;
-			image[i][j].rgbtBlue = tmp_image[i][width - j - 1].rgbtBlue;
-			
+			//swap element at opposite end of array
+			swap(&image[i][j], &image[i][width - j - 1]);
 		}
 	}
     return;
@@ -106,8 +111,10 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
     return;
 }
 
+//limits color value to 255
 int limit(int value)
 {
+	//if value < 255, return value, else return 255
 	return value < 255 ? value: 255;
 }
 
