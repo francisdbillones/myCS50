@@ -1,6 +1,7 @@
 // Implements a dictionary's functionality
 
 #include <stdbool.h>
+#include <string.h>
 
 #include "dictionary.h"
 
@@ -17,6 +18,9 @@ const unsigned int N = 26;
 
 // Hash table
 node *table[N];
+
+// var to keep track of word count
+unsigned int word_count = 0;
 
 // Returns true if word is in dictionary else false
 bool check(const char *word)
@@ -63,27 +67,40 @@ bool load(const char *dictionary)
     //loop to scan each string in dictionary
     while(fscanf(dictionary_in, "%s", tmp_word))
     {
+        //increment the value of word_count
+        word_count++;
+
         //create new node
         node* new_node = malloc(sizeof(node));
 
+        //checks that memory was allocated properly
         if (new_node != NULL)
         {
+            //copy from tmp_word into new_node->word
             strcpy(new_node->word, tmp_word);
+            //set new_node->next to NULL for now
             new_node->next = NULL;
+            //insert new_node into appropriate position in hash table
             put_in_hash(table, new_node);
+        }
+        //if error in allocating memory, return false
+        else
+        {
+            printf("Error loading dictionary\n");
+            word_count = 0;
+            return false;
         }
 
     }
 
 
-    return false;
+    return true;
 }
 
 // Returns number of words in dictionary if loaded else 0 if not yet loaded
 unsigned int size(void)
 {
-    // TODO
-    return 0;
+    return word_count;
 }
 
 // Unloads dictionary from memory, returning true if successful else false
