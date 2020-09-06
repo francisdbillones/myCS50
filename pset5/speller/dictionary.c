@@ -37,7 +37,7 @@ unsigned int hash(const char *word)
 }
 
 // places node element into the front appropriate linked list 
-void put_in_hash(node* hash_table[], node* node)
+void add_to_hash(node* hash_table[], node* node)
 {
     //make a temporary variable for node to be placed
     node* tmp_node = node;
@@ -65,7 +65,7 @@ bool load(const char *dictionary)
     char tmp_word[LENGTH + 1];
 
     //loop to scan each string in dictionary
-    while(fscanf(dictionary_in, "%s", tmp_word))
+    while(fscanf(dictionary_in, "%s", tmp_word) != EOF)
     {
         //increment the value of word_count
         word_count++;
@@ -81,7 +81,7 @@ bool load(const char *dictionary)
             //set new_node->next to NULL for now
             new_node->next = NULL;
             //insert new_node into appropriate position in hash table
-            put_in_hash(table, new_node);
+            add_to_hash(table, new_node);
         }
         //if error in allocating memory, return false
         else
