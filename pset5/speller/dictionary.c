@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "dictionary.h"
 
@@ -62,7 +63,7 @@ void add_to_hash(node* hash_table[], node* node)
 bool load(const char *dictionary)
 {
     //open dictionary file
-    FILE *dictionary_in = fopen(argv[1], "r");
+    FILE *dictionary_in = fopen(dictionary, "r");
 
     //checking for file open error
     if (dictionary_in == NULL)
