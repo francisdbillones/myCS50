@@ -30,7 +30,10 @@ unsigned int word_count = 0;
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
+    //variable to traverse each node
     node* traverse = table[hash(&word[0])]->next;
+
+    //loop to traverse each node and check if word matches current node
     while (traverse != NULL)
     {
         if (strcasecmp(traverse->word, word) == 0)
@@ -51,61 +54,53 @@ unsigned int hash(const char *word)
 }
 
 // places node element into the front of appropriate linked list 
-void add_to_hash(node* hash_table[], node* node)
+void add_to_hash(node* hash_table[], node* n)
 {
-    //sets node's next pointer to point at the same thing head is pointing to
-    node->next = table[hash(&node->word[0])]->next;
-    //sets head to point at node
-    table[hash(&node->word[0])]->next = node;
+    n->next = hash_table[hash(n->word)];
+    hash_table[hash(n->word)]->next = n;
 }
 
 // Loads dictionary into memory, returning true if successful else false
 bool load(const char *dictionary)
 {
-    //open dictionary file
-    FILE *dictionary_in = fopen(dictionary, "r");
-
-    //checking for file open error
-    if (dictionary_in == NULL)
-    {
-        printf("Error opening dictionary file\n");
-        return false;
-    }
-
-    //temporary word store
+    //temporary variable to store a single word
     char tmp_word[LENGTH + 1];
 
-    //loop to scan each string in dictionary
-    while(fscanf(dictionary_in, "%s", tmp_word) != EOF)
+    //open file
+    FILE* dictionary_file = fopen(dictionary, "r");
+
+    //if successfully opened file,
+    if (dictionary_file != NULL)
     {
-        //increment the value of word_count
-        word_count++;
-
-        //create new node
-        node* new_node = malloc(sizeof(node));
-
-        //checks that memory was allocated properly
-        if (new_node != NULL)
+        //while loop to scan each string in dictionary into tmp_word
+        while (fscanf(dictionary_file, "%s", tmp_word) != EOF)
         {
-            //copy from tmp_word into new_node->word
-            strcpy(new_node->word, tmp_word);
-            //set new_node->next to NULL for now
-            new_node->next = NULL;
-            //insert new_node into appropriate position in hash table
-            add_to_hash(table, new_node);
-        }
-        //if error in allocating memory, return false
-        else
-        {
-            printf("Error loading dictionary\n");
-            word_count = 0;
-            return false;
-        }
+            //increment word count for each iteration
+            word_count++;
 
+            //create new node and allocate enough memory
+            node* new_node = malloc(sizeof(node));
+
+            //if memory successfully allocated,
+            if (new_node != NULL)
+            {
+                //copy string from tmp_word into the node's word
+                strcpy(new_node->word, tmp_word);
+                //add new_node to hash table
+                add_to_hash(table, new_node);
+            }
+
+            //else error allocating memory
+            else
+            {
+                word_count = 0;
+                printf("Memory error, could not load dictionary.\n");
+                return false;
+            }
+        }
+        return true;
     }
-
-
-    return true;
+    return false;
 }
 
 // Returns number of words in dictionary if loaded else 0 if not yet loaded
@@ -117,6 +112,18 @@ unsigned int size(void)
 // Unloads dictionary from memory, returning true if successful else false
 bool unload(void)
 {
-    free(table);
+    node* tmp_crawler_next;
+    node* crawler;
+
+    for (int i = 0; i < ALPHABET; i++)
+    {
+        crawler = table[i];
+        while (crawler->next != NULL)
+        {
+            tmp_crawler_next = crawler->next;
+            free(crawler);
+            crawler = tmp_crawler_next;
+        }
+    }
     return true;
 }
