@@ -49,9 +49,11 @@ bool check(const char *word)
 // Hashes word to a number
 unsigned int hash(const char *word)
 {
+    char tmp_word[sizeof(word)];
     //casts char to int, converts it to uppercase, and subtracts the alpha_factor (65). 
     //through this, the ascii value of A (65) becomes 0, B becomes 1, etc
-    return ((int) (toupper(word[0])) - ALPHA_FACTOR);
+    strcpy(tmp_word, word);
+    return ((int) toupper(tmp_word[0]) - ALPHA_FACTOR);
 }
 
 // places node element into the front of appropriate linked list 
