@@ -31,13 +31,13 @@ unsigned int word_count = 0;
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
-    //variable to traverse each node
-    node* traverse = table[hash(&word[0])]->next;
+    //variable to traverse each node, set to equal to first node in appropriate bucket
+    node* traverse = table[hash(&word[0])];
 
     //loop to traverse each node and check if word matches current node
     while (traverse != NULL)
     {
-        if (strcasecmp(traverse->word, word) == 0)
+        if (strcasecmp(traverse->word, word))
         {
             return true;
         }
