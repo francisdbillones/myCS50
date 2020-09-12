@@ -89,6 +89,7 @@ bool load(const char *dictionary)
             {
                 //copy string from tmp_word into the node's word
                 strcpy(new_node->word, tmp_word);
+                new_node->next = NULL;
                 //add new_node to hash table
                 add_to_hash(new_node);
             }
