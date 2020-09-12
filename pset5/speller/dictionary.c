@@ -67,7 +67,7 @@ void add_to_hash(node* n)
 bool load(const char *dictionary)
 {
     //temporary variable to store a single word
-    char tmp_word[LENGTH + 1];
+    char word[LENGTH + 1];
 
     //open file
     FILE* dictionary_file = fopen(dictionary, "r");
@@ -75,9 +75,11 @@ bool load(const char *dictionary)
     //if successfully opened file,
     if (dictionary_file != NULL)
     {
-        //while loop to scan each string in dictionary into tmp_word
-        while (fscanf(dictionary_file, "%s", tmp_word) != EOF)
+        //while loop to scan each string in dictionary into word
+        while (fscanf(dictionary_file, "%s", word) != EOF)
         {
+            if (word[0] == '\0') {continue;}
+
             //increment word count for each iteration
             word_count++;
 
@@ -88,8 +90,8 @@ bool load(const char *dictionary)
             if (new_node != NULL)
             {
                 //copy string from tmp_word into the node's word
-                strcpy(new_node->word, tmp_word);
-                //set  0    `        
+                strcpy(new_node->word, word);
+                //set the next pointer of new node to null      
                 new_node->next = NULL;
                 //add new_node to hash table
                 add_to_hash(new_node);
@@ -98,13 +100,16 @@ bool load(const char *dictionary)
             //else error allocating memory
             else
             {
+                //set word_count to 0, to signify error in loading
                 word_count = 0;
+
                 printf("Memory error, could not load dictionary.\n");
                 return false;
             }
         }
         return true;
     }
+    printf("Error in opening file\n");
     return false;
 }
 
@@ -122,6 +127,7 @@ bool unload(void)
 
     for (int i = 0; i < ALPHABET; i++)
     {
+        if (table[i] == NULL) {continue;}
         crawler = table[i];
         while (crawler->next != NULL)
         {
