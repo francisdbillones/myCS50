@@ -57,10 +57,10 @@ unsigned int hash(const char *word)
 }
 
 // places node element into the front of appropriate linked list 
-void add_to_hash(node* hash_table[], node* n)
+void add_to_hash(node* n)
 {
-    n->next = hash_table[hash(n->word)];
-    hash_table[hash(n->word)]->next = n;
+    n->next = table[hash(n->word)];
+    table[hash(n->word)] = n;
 }
 
 // Loads dictionary into memory, returning true if successful else false
@@ -90,7 +90,7 @@ bool load(const char *dictionary)
                 //copy string from tmp_word into the node's word
                 strcpy(new_node->word, tmp_word);
                 //add new_node to hash table
-                add_to_hash(table, new_node);
+                add_to_hash(new_node);
             }
 
             //else error allocating memory
