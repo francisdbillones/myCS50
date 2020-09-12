@@ -2,6 +2,9 @@
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <strings.h>
+#include <ctype.h>
+#include <stdlib.h>
 
 #include "dictionary.h"
 
@@ -13,8 +16,8 @@ typedef struct node
 }
 node;
 
-#define ALPHA_FACTOR 65;
-#define ALPHABET 26;
+#define ALPHA_FACTOR 65
+#define ALPHABET 26
 
 // var to store amount of words in dictionary
 unsigned int word_count = 0;
@@ -31,7 +34,15 @@ void add_to_hash(node* node)
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
-    // TODO
+    node* traverse = table[hash(word)];
+    while (traverse != NULL)
+    {
+        if (strcasecmp(traverse->word, word) == 0)
+        {
+            return true;
+        }
+        traverse = traverse->next;
+    }
     return false;
 }
 
@@ -39,13 +50,13 @@ bool check(const char *word)
 unsigned int hash(const char *word)
 {
     char buffer = word[0];
-    return ((((int) toupper(buffer)) - ALPHA_FACTOR) % ALPHABET);
+    return (((int) (toupper(buffer)) - ALPHA_FACTOR) % ALPHABET);
 }
 
 // Loads dictionary into memory, returning true if successful else false
 bool load(const char *dictionary)
 {
-    dictionary_in = fopen(dictionary, "r");
+    FILE* dictionary_in = fopen(dictionary, "r");
     if (dictionary_in != NULL)
     {
         char buffer[LENGTH + 1];
@@ -76,8 +87,7 @@ bool load(const char *dictionary)
 // Returns number of words in dictionary if loaded else 0 if not yet loaded
 unsigned int size(void)
 {
-    // TODO
-    return 0;
+    return word_count;
 }
 
 // Unloads dictionary from memory, returning true if successful else false
