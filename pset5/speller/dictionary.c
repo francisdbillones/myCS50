@@ -38,8 +38,8 @@ bool check(const char *word)
 // Hashes word to a number
 unsigned int hash(const char *word)
 {
-    // TODO
-    return 0;
+    char buffer = word[0];
+    return ((((int) toupper(buffer)) - ALPHA_FACTOR) % ALPHABET);
 }
 
 // Loads dictionary into memory, returning true if successful else false
@@ -49,7 +49,7 @@ bool load(const char *dictionary)
     if (dictionary_in != NULL)
     {
         char buffer[LENGTH + 1];
-        
+
         while (fscanf(dictionary_in, "%s", buffer) != EOF)
         {
             word_count++;
