@@ -53,7 +53,7 @@ unsigned int hash(const char *word)
     //casts char to int, converts it to uppercase, and subtracts the alpha_factor (65). 
     //through this, the ascii value of A (65) becomes 0, B becomes 1, etc
     strcpy(tmp_word, word);
-    return ((int) toupper(tmp_word[0]) - ALPHA_FACTOR);
+    return (((int) toupper(tmp_word[0]) - ALPHA_FACTOR) % ALPHABET);
 }
 
 // places node element into the front of appropriate linked list 
