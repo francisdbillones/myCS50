@@ -93,6 +93,18 @@ unsigned int size(void)
 // Unloads dictionary from memory, returning true if successful else false
 bool unload(void)
 {
-    // TODO
-    return false;
+    node* crawler;
+    node* crawler_next;
+
+    for (int i = 0; i < ALPHABET; i++)
+    {
+        crawler = table[i];
+        while (crawler != NULL)
+        {
+            crawler_next = crawler->next;
+            free(crawler);
+            crawler = crawler_next;
+        }
+    }
+    return true;
 }
