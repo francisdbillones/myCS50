@@ -60,6 +60,7 @@ unsigned int hash(const char *word)
 bool load(const char *dictionary)
 {
     FILE* dictionary_in = fopen(dictionary, "r");
+
     if (dictionary_in != NULL)
     {
         char buffer[LENGTH + 1];
@@ -82,7 +83,8 @@ bool load(const char *dictionary)
                 return false;
             }
         }
-        return true;
+        if (fclose(dictionary_in) != EOF) 
+            return true;
     }
     return false;
 }
