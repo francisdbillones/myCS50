@@ -23,6 +23,7 @@ node;
 // Number of buckets in hash table
 const unsigned int N = 26;
 
+// Number of words in dictionary
 unsigned int word_count = 0;
 
 // Hash table
@@ -30,20 +31,28 @@ node *table[N];
 
 void add_to_hash(node* node)
 {
+    //set node's next pointer to first element in appropriate hash bucket
     node->next = table[hash(node->word)];
+    //set the node as the new first element in the hash bucket
     table[hash(node->word)] = node;
 }
 
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
+    //initialize traverse function and set it to first element in appropriate hash bucket
     node* traverse = table[hash(word)];
+
+    //while traverse isn't the end of the bucket yet,
     while (traverse != NULL)
     {
+        //check if the current traverse node is equal to word
         if (strcasecmp(traverse->word, word) == 0)
         {
             return true;
         }
+
+        //else, move on to next node
         traverse = traverse->next;
     }
     return false;
@@ -52,40 +61,63 @@ bool check(const char *word)
 // Hashes word to a number
 unsigned int hash(const char *word)
 {
+    //buffer to store the first char in word
     char buffer = word[0];
+
+    //substract alpha_factor from ascii code of buffer, which returns the position of the char in the alphabet, and thus the index of hash table
     return (((int) (toupper(buffer)) - ALPHA_FACTOR) % N);
 }
 
 // Loads dictionary into memory, returning true if successful else false
 bool load(const char *dictionary)
 {
+    //open dictionary file
     FILE* dictionary_in = fopen(dictionary, "r");
 
+    //check if file open was successful
     if (dictionary_in != NULL)
     {
+        //buffer to store string from fscanf
         char buffer[LENGTH + 1];
 
+        //iterate over every string until reached end of file
         while (fscanf(dictionary_in, "%s", buffer) != EOF)
-        {
+        {  
+            //increment word count for every iteration
             word_count++;
+
+            //allocate new memory for a new node
             node* new_node = malloc(sizeof(node));
 
+            //check if memory allocation was successful
             if (new_node != NULL)
             {
+                //set the new node's next pointer to NULL for now
                 new_node->next = NULL;
+
+                //copy the string from buffer to the new_node's word container
                 strcpy(new_node->word, buffer);
+
+                //add the node to the hash table
                 add_to_hash(new_node);
             }
+
+            //if error in allocating memory,
             else
             {
+                //reset word count to indicate error in loading
                 word_count = 0;
+
                 printf("Memory error\n");
                 return false;
             }
         }
+        //close dictionary file and check if closing was successful, then return true
         if (fclose(dictionary_in) != EOF) 
             return true;
     }
+
+    //if file open was not successful, return false
     return false;
 }
 
@@ -98,16 +130,27 @@ unsigned int size(void)
 // Unloads dictionary from memory, returning true if successful else false
 bool unload(void)
 {
+    //node var to "crawl" through each node in hash table
     node* crawler;
+    //node var to store crawler's next pointer, since the original will be lost after free()
     node* crawler_next;
 
+    //iterate through each bucket in hash table
     for (int i = 0; i < N; i++)
     {
+        //set crawler to first element in bucket
         crawler = table[i];
+
+        //while crawler isn't the end of bucket,
         while (crawler != NULL)
         {
+            //store the next pointer
             crawler_next = crawler->next;
+
+            //free the current node
             free(crawler);
+
+            //"crawl" to the next node
             crawler = crawler_next;
         }
     }
