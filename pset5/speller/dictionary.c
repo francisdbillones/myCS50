@@ -1,10 +1,6 @@
 // Implements a dictionary's functionality
 
 #include <stdbool.h>
-#include <stdio.h>
-#include <strings.h>
-#include <ctype.h>
-#include <stdlib.h>
 
 #include "dictionary.h"
 
@@ -17,13 +13,14 @@ typedef struct node
 node;
 
 #define ALPHA_FACTOR 65
-#define ALPHABET 26
 
-// var to store amount of words in dictionary
+// Number of buckets in hash table
+const unsigned int N = 26;
+
 unsigned int word_count = 0;
 
 // Hash table
-node *table[ALPHABET];
+node *table[N];
 
 void add_to_hash(node* node)
 {
@@ -96,7 +93,7 @@ bool unload(void)
     node* crawler;
     node* crawler_next;
 
-    for (int i = 0; i < ALPHABET; i++)
+    for (int i = 0; i < N; i++)
     {
         crawler = table[i];
         while (crawler != NULL)
