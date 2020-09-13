@@ -1,6 +1,10 @@
 // Implements a dictionary's functionality
 
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
 
 #include "dictionary.h"
 
@@ -47,7 +51,7 @@ bool check(const char *word)
 unsigned int hash(const char *word)
 {
     char buffer = word[0];
-    return (((int) (toupper(buffer)) - ALPHA_FACTOR) % ALPHABET);
+    return (((int) (toupper(buffer)) - ALPHA_FACTOR) % N);
 }
 
 // Loads dictionary into memory, returning true if successful else false
