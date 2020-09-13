@@ -21,7 +21,7 @@ node;
 #define ALPHA_FACTOR 65
 
 // Number of buckets in hash table
-const unsigned int N = 26;
+const unsigned int N = 65536;
 
 // Number of words in dictionary
 unsigned int word_count = 0;
@@ -61,11 +61,12 @@ bool check(const char *word)
 // Hashes word to a number
 unsigned int hash(const char *word)
 {
-    //buffer to store the first char in word
-    char buffer = word[0];
-
-    //substract alpha_factor from ascii code of buffer, which returns the position of the char in the alphabet, and thus the index of hash table
-    return (((int) (toupper(buffer)) - ALPHA_FACTOR) % N);
+    unsigned int hash_value = 0;
+    for (int i = 0, n = strlen(word); i < n; i++)
+    {
+        hash_value = (hash_value << 2) ^ word[i];
+    }
+    return hash_value % N; //N is size of hashtable
 }
 
 // Loads dictionary into memory, returning true if successful else false
