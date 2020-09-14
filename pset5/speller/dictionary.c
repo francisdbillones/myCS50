@@ -62,6 +62,8 @@ bool check(const char *word)
 unsigned int hash(const char *word)
 {
     unsigned int hash_value = 0;
+    char tmp_word[strlen(word) + 1];
+    strcpy(tmp_word, word);
     for (int i = 0, n = strlen(word); i < n; i++)
     {
         hash_value = (hash_value << 2) ^ word[i];
@@ -77,7 +79,7 @@ bool load(const char *dictionary)
 
     //check if file open was successful
     if (dictionary_in != NULL)
-    {
+    { 
         //buffer to store string from fscanf
         char buffer[LENGTH + 1];
 

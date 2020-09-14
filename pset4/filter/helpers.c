@@ -164,13 +164,6 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
 					gx_green_sum += gx_weight[a + 1][b + 1] * tmp_image[i + a][j + b].rgbtGreen;
 					gx_blue_sum += gx_weight[a + 1][b + 1] * tmp_image[i + a][j + b].rgbtBlue;
 
-					if (i == 0 && j < 2)
-					{
-						printf("gx weight = %i\n", gx_weight[a + 1][b + 1]);
-						printf(" a + 1 = %i, b + 1 = %i\n", a + 1, b + 1);
-						printf("gx red sum = %i\n", gx_red_sum);
-					}
-
 					//compute for gy
 					gy_red_sum += gy_weight[a + 1][b + 1] * tmp_image[i + a][j + b].rgbtRed;
 					gy_green_sum += gy_weight[a + 1][b + 1] * tmp_image[i + a][j + b].rgbtGreen;
@@ -184,7 +177,5 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
 			image[i][j].rgbtBlue = limit(round(sqrt(gx_blue_sum*gx_blue_sum + gy_blue_sum*gy_blue_sum)));
 		}
 	}
-
-	printf("gx_weight[1][0] = %i\n", gx_weight[1][0]);
     return;
 }
