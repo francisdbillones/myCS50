@@ -6,33 +6,25 @@ def main():
 	if len(sys.argv) != 3:
 		print("Usage: python dna.py database.csv sequence.txt")
 		exit(1)
+	
+	with open(sys.argv[1]) as database_file:
+		database = csv.DictReader(open(sys.argv[1]))
 
-	# open database
-	database_file = open(sys.argv[1])
-	database = csv.DictReader(database_file)
+	with open(sys.argv[2]) as sequence_file:
+		sequence = open(sys.argv[2]).read()
 
-	sequence_file = open(sys.argv[2])
-	sequence = sequence_file.read()
+	STR_types = database.fieldnames 
 
-	STR_types = database.fieldnames # get all STR types available in the database
-
-	scanned_sequence = check_for_strs(sequence, STR_types)
-
-	was_there_a_match = False
+	scanned_sequence = scanSTRs(sequence, STR_types)
+	
 	for person in database:
-		match = True
-		for STR in STR_types:
-			if STR == "name":
-				continue
-			if int(person[STR]) != scanned_sequence[STR]:
-				match = False
+		match = min([int(person[STR]) == scanned_sequence[STR] for STR in STR_types if STR != "name"])
 		if match:
-			print(person['name'])
-			was_there_a_match = True
-	if was_there_a_match == False:
-		print("No match")
+			print(person["name"])
+			return
+	print("No match")
 
-def check_for_strs(sequence, STR_types):
+def scanSTRs(sequence, STR_types):
 	current_position = 0
 
 	STR_longest_runs = dict.fromkeys(STR_types, 0)
