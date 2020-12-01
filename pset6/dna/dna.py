@@ -21,23 +21,16 @@ def main():
 	was_there_a_match = False
 	for person in database:
 		match = True
-
 		for STR in STR_types:
 			if STR == "name":
 				continue
-				
 			if int(person[STR]) != scanned_sequence[STR]:
 				match = False
-
 		if match:
 			print(person['name'])
 			was_there_a_match = True
-
 	if was_there_a_match == False:
 		print("No match")
-
-
- 	#TODO
 
 def check_for_strs(sequence, STR_types):
 	current_position = 0
