@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
 
 int getHeight();
 
 int main(void){
 	int n = getHeight();
-	printf("%i\n", n);
+	
 	for (int line = 0; line < n; line++){
 		for (int spaces = 0; spaces < n - line - 1; spaces++){
 			printf(" ");
@@ -19,7 +21,10 @@ int main(void){
 
 int getHeight(){
 	int n;
-	printf("height: ");
-	scanf("%d", &n);
+	do {
+		printf("height: ");
+		scanf("%d", &n);
+	}
+	while (n>8 || n < 1);
 	return n;
 }	
